@@ -13,6 +13,7 @@
                  [com.cemerick/drawbridge "0.0.6"]
                  [postgresql "9.1-901.jdbc4"]]
   :min-lein-version "2.0.0"
+  :main ^:skip-aot nextbus.web
   :plugins [[environ/environ.lein "0.2.1"]]
   :hooks [environ.leiningen.hooks]
   :profiles {:production {:env {:production true}}})
