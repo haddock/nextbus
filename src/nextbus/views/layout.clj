@@ -7,18 +7,18 @@
     [:meta {:charset "utf-8"}]
     [:meta {:http-equiv "X-UA-Compatible" :content "IE=edge,chrome=1"}]
     [:meta {:name "viewport" :content
-            "width=device-width, initial-scale=1, maximum-scale=1"}]
+            "width=device-width, initial-scale=1"}]
     [:title title]
-    (h/include-css "/stylesheets/base.css"
-                 "/stylesheets/skeleton.css"
-                 "/stylesheets/screen.css")
-    (h/include-css "http://fonts.googleapis.com/css?family=Sigmar+One&v1")]
+    (h/include-css "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
+                 "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css")
+    (h/include-js "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js")]
    [:body
-    [:div {:id "header"}
-     [:h1 {:class "container"} "NEXTBUS"]]
-    [:div {:id "content" :class "container"} body]]))
+    [:div {:id "content" :class "container"} body]
+    (h/include-js "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")]))
 
 (defn four-oh-four []
   (common "Page Not Found"
-          [:div {:id "four-oh-four"}
+  				[:div {:id "header" :class "page-header"}
+     				[:h1 "404"]]
+          [:div {:id "four-oh-four" :class "alert alert-danger"}
            "The page you requested could not be found"]))
