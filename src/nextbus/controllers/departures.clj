@@ -10,4 +10,4 @@
   (view/index (model/all)))
 
 (defroutes routes
-  (GET "/" [] index))
+  (GET "/" [] (index)))

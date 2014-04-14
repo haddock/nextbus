@@ -1,56 +1,25 @@
 (ns nextbus.web
-  (:require [compojure.core :refer [defroutes GET PUT POST DELETE ANY]]
-            [compojure.handler :refer [site]]
+  (:require [compojure.core :refer [defroutes]]
+            [ring.adapter.jetty :as ring]
             [compojure.route :as route]
-            [clojure.java.io :as io]
-            [ring.middleware.stacktrace :as trace]
-            [ring.middleware.session :as session]
-            [ring.middleware.session.cookie :as cookie]
-            [ring.adapter.jetty :as jetty]
-            [ring.middleware.basic-authentication :as basic]
-            [cemerick.drawbridge :as drawbridge]
-            [environ.core :refer [env]]
+            [compojure.handler :as handler]
             [nextbus.controllers.departures :as departures]
             [nextbus.views.layout :as layout]
             [nextbus.models.migration :as schema])
   (:gen-class))
 
-(defn- authenticated? [user pass]
-  ;; TODO: heroku config:add REPL_USER=[...] REPL_PASSWORD=[...]
-  (= [user pass] [(env :repl-user false) (env :repl-password false)]))
-
-(def ^:private drawbridge
-  (-> (drawbridge/ring-handler)
-      (session/wrap-session)
-      (basic/wrap-basic-authentication authenticated?)))
-
-(defroutes app
-  (ANY "/repl" {:as req}
-    (drawbridge req))
+(defroutes routes
   departures/routes
   (route/resources "/")
   (route/not-found (layout/four-oh-four)))
 
-(defn wrap-error-page [handler]
-  (fn [req]
-    (try (handler req)
-         (catch Exception e
-           {:status 500
-            :headers {"Content-Type" "text/html"}
-            :body (slurp (io/resource "500.html"))}))))
+(def application (handler/site routes))
 
-(defn -main [& [port]]
-  (let [port (Integer. (or port (env :port) 5000))
-        ;; TODO: heroku config:add SESSION_SECRET=$RANDOM_16_CHARS
-        store (cookie/cookie-store {:key (env :session-secret)})]
-    (jetty/run-jetty (-> #'app
-                         ((if (env :production)
-                            wrap-error-page
-                            trace/wrap-stacktrace))
-                         (site {:session {:store store}}))
-                     {:port port :join? false})))
+(defn start [port]
+  (ring/run-jetty application {:port port
+                               :join? false}))
 
-;; For interactive development:
-;; (.stop server)
-;; (def server (-main))
-
+(defn -main []
+  (schema/migrate)
+  (let [port (Integer. (or (System/getenv "PORT") "8080"))]
+    (start port)))

@@ -3,6 +3,11 @@
 		[nextbus.models.departure :as departure]))
 
 (defn migrated? []
+	(-> (sql/query departure/spec
+									[(str "select count(*) from information_schema.tables where table_name='departures'")])
+	first :count pos?))
+
+(defn migrate []
 	(when (not (migrated?))
 		(print "Creating database structure...") (flush)
 		(sql/db-do-commands departure/spec
