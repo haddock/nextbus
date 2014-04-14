@@ -5,11 +5,15 @@
 (defn display-departures [departures]
 	[:div {:class "departures"}
 	 (map
-	 	(fn [departure] [:h2 {:class "departure"} (h (:body departure))])
+	 	(fn [departure] [:h4 {:class "departure"} (h (:estimated departure))])
 	 	departures)])
 
 (defn index [departures]
 	(layout/common "NÄSTA BUSS"
-		[:div {:id "header" :class "page-header"}
-     [:h1 "NÄSTA BUSS"]]
-		(display-departures departures)))
+		[:div {:class "page-header"}
+     [:h1 "NÄSTA BUSS FRÅN KUNGSHOLMS KYRKA"]]
+    [:div {:class "panel panel-primary"}
+     [:div {:class "panel-heading"}
+       [:h3 {:class "panel-title"} "BUSS 3 MOT SKANSTULL"]]
+     [:div {:class "panel-body"}
+		 (display-departures departures)]]))

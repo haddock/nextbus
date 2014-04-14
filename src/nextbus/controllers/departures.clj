@@ -1,6 +1,6 @@
 (ns nextbus.controllers.departures
   (:require
-    [compojure.core :refer [defroutes GET ANY]]
+    [compojure.core :refer [defroutes GET]]
     [clojure.string :as str]
     [ring.util.response :as ring]
     [nextbus.views.departures :as view]

@@ -4,8 +4,7 @@
             [compojure.route :as route]
             [compojure.handler :as handler]
             [nextbus.controllers.departures :as departures]
-            [nextbus.views.layout :as layout]
-            [nextbus.models.migration :as schema])
+            [nextbus.views.layout :as layout])
   (:gen-class))
 
 (defroutes routes
@@ -20,6 +19,5 @@
                                :join? false}))
 
 (defn -main []
-  (schema/migrate)
   (let [port (Integer. (or (System/getenv "PORT") "8080"))]
     (start port)))
