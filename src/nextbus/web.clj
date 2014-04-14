@@ -9,7 +9,11 @@
             [ring.adapter.jetty :as jetty]
             [ring.middleware.basic-authentication :as basic]
             [cemerick.drawbridge :as drawbridge]
-            [environ.core :refer [env]]))
+            [environ.core :refer [env]]
+            [nextbus.controllers.departures :as departures]
+            [nextbus.views.layout :as layout]
+            [nextbus.models.migration :as schema])
+  (:gen-class))
 
 (defn- authenticated? [user pass]
   ;; TODO: heroku config:add REPL_USER=[...] REPL_PASSWORD=[...]
@@ -22,13 +26,10 @@
 
 (defroutes app
   (ANY "/repl" {:as req}
-       (drawbridge req))
-  (GET "/" []
-       {:status 200
-        :headers {"Content-Type" "text/plain"}
-        :body (pr-str ["Hello" :from 'Heroku])})
-  (ANY "*" []
-       (route/not-found (slurp (io/resource "404.html")))))
+    (drawbridge req))
+  departures/routes
+  (route/resources "/")
+  (route/not-found (layout/four-oh-four)))
 
 (defn wrap-error-page [handler]
   (fn [req]
@@ -52,3 +53,4 @@
 ;; For interactive development:
 ;; (.stop server)
 ;; (def server (-main))
+
