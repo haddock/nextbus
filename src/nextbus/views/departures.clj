@@ -7,13 +7,13 @@
      [:div {:class "panel-heading"}
        [:h3 {:class "panel-title"} "BUSS 3 MOT SÖDERSJUKHUSET"]]
      	 [:div {:class "panel-body"}
-			   [:div {:class "departures"}
+			   [:div
 	 (map
-	 	(fn [departure] [:h3 {:class "departure"} (h (:DisplayTime departure))])
+	 	(fn [departure] [:h3 (h (:DisplayTime departure))])
 	 	(get departures "Södersjukhuset"))]]])
 
 (defn index [departures]
-	(layout/common "NÄSTA BUSS"
+	(layout/common "NÄSTA BUSS FRÅN KUNGSHOLMS KYRKA"
 		[:div {:class "page-header"}
-     [:h1 "NÄSTA BUSS FRÅN KUNGSHOLMS KYRKA"]]
+     [:h1 "KUNGSHOLMS KYRKA"]]
 		 (display-departures departures)))
