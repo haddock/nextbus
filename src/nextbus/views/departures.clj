@@ -13,7 +13,7 @@
 		
 		 (map
 		 	(fn [departure] [:h3 (h (:DisplayTime departure))])
-		 	(take 4 (get departures destination)))
+		 	(take 3 (get departures destination)))
 		 ]]])
 		(keys departures))])
 
