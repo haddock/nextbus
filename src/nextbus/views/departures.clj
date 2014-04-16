@@ -3,14 +3,19 @@
 		[hiccup.core :refer [h]]))
 
 (defn display-departures [departures]
-	[:div {:class "panel panel-primary"}
-     [:div {:class "panel-heading"}
-       [:h3 {:class "panel-title"} "BUSS 3 MOT SÖDERSJUKHUSET"]]
-     	 [:div {:class "panel-body"}
-			   [:div
-	 (map
-	 	(fn [departure] [:h3 (h (:DisplayTime departure))])
-	 	(get departures "Södersjukhuset"))]]])
+	[:div {:class "row"}	
+	(map (fn [destination]  
+		[:div {:class "col-sm-4"}
+		[:div {:class "panel panel-primary"}
+	  [:div {:class "panel-heading"}
+	  [:h3 {:class "panel-title"} (clojure.string/upper-case (str "MOT " destination))]]
+	  [:div {:class "panel-body"}	   
+		
+		 (map
+		 	(fn [departure] [:h3 (h (:DisplayTime departure))])
+		 	(get departures destination))
+		 ]]])
+		(keys departures))])
 
 (defn index [departures]
 	(layout/common "NÄSTA BUSS FRÅN KUNGSHOLMS KYRKA"

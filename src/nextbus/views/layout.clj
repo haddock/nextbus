@@ -13,7 +13,7 @@
                  "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css")
     (h/include-js "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js")]
    [:body
-    [:div {:id "content" :class "container"} body]
+    [:div {:id "content" :class "container theme-showcase"} body]
     (h/include-js "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")]))
 
 (defn four-oh-four []
