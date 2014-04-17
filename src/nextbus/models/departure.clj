@@ -5,8 +5,7 @@
 
 (def ttl-cache (atom (cache/ttl-cache-factory {} :ttl 29000)))
 
-(defn hit-or-miss
-  [c k v]
+(defn hit-or-miss [c k v]
   (if (cache/has? c k)
     (cache/hit c k)
     (cache/miss c k v)))  
