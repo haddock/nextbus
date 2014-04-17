@@ -7,7 +7,7 @@
     [nextbus.models.departure :as model]))
 
 (defn index []
-  (view/index (model/all)))
+  (view/index (model/all ttl-cache)))
 
 (defroutes routes
   (GET "/" [] (index)))

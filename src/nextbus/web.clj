@@ -2,10 +2,13 @@
   (:require [compojure.core :refer [defroutes]]
             [ring.adapter.jetty :as ring]
             [compojure.route :as route]
+            [clojure.core.cache :as cache]
             [compojure.handler :as handler]
             [nextbus.controllers.departures :as departures]
             [nextbus.views.layout :as layout])
   (:gen-class))
+
+(def ttl-cache (atom (cache/ttl-cache-factory {} :ttl 20000)))
 
 (defroutes routes
   departures/routes
