@@ -8,8 +8,6 @@
             [nextbus.views.layout :as layout])
   (:gen-class))
 
-(def ttl-cache (atom (cache/ttl-cache-factory {} :ttl 20000)))
-
 (defroutes routes
   departures/routes
   (route/resources "/")
