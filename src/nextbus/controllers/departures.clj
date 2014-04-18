@@ -1,13 +1,12 @@
 (ns nextbus.controllers.departures
   (:require
     [compojure.core :refer [defroutes GET]]
-    [clojure.string :as str]
-    [ring.util.response :as ring]
     [nextbus.views.departures :as view]
     [nextbus.models.departure :as model]))
 
-(defn index []
-  (view/index (model/all)))
+(defn index [site-id]
+  (view/index (model/all site-id)))
 
 (defroutes routes
-  (GET "/" [] (index)))
+	(GET "/" [] (index :1204))
+  (GET "/:site-id" [site-id] (index (keyword site-id))))
