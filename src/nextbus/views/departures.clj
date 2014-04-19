@@ -17,12 +17,8 @@
 		 ]]])
 		(keys departures))])
 
-(defn stop-name [departures]
-	(:StopAreaName (first (second (first departures)))))
-
 (defn index [departures]
-	(layout/common (clojure.string/upper-case (str "NÄSTA BUSS FRÅN " (stop-name departures)))
-		[:div {:class "page-header"}
-     [:h1 (clojure.string/upper-case (str (stop-name departures)))]]
-		 (display-departures departures)))
-
+	(let [stop-name (clojure.string/upper-case (:StopAreaName (first (second (first departures)))))]
+	(layout/common (str "NÄSTA BUSS FRÅN " stop-name)
+		[:div {:class "page-header"} [:h1 stop-name]]
+		 (display-departures departures))))

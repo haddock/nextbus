@@ -11,13 +11,13 @@
     (cache/miss c k v)))  
 
 (defn data-from-sl [site-id]
-	(let [{:keys [status headers body error] :as resp} @(http/get (str "https://api.trafiklab.se/sl/realtid2/GetAllDepartureTypes.json/" (name site-id) "/30?key=HDefrbKfMrC0mdm1MEuoaziRZT4h01Kk"))]
+	(println )
+	(let [{:keys [body error] :as resp} @(http/get (str "https://api.trafiklab.se/sl/realtid2/GetAllDepartureTypes.json/" (name site-id) "/30?key=" (System/getenv "SL_API_KEY")))]
   	(if error
     	(println "Failed, exception: " error)
     	body)))
 
 (defn all [site-id]
-	(println site-id)
 	(if (cache/has? @ttl-cache site-id)
 		(site-id @ttl-cache)
 		(site-id (swap! ttl-cache hit-or-miss site-id (group-by :Destination (:Buses (into {} (json/read-json (data-from-sl site-id)))))))))
