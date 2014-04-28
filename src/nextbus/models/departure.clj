@@ -5,20 +5,24 @@
 
 (def ttl-cache (atom (cache/ttl-cache-factory {} :ttl 29000)))
 
+(defn api-url [site-id]
+	(str "https://api.trafiklab.se/sl/realtid2/GetAllDepartureTypes.json/" (name site-id) "/30?key=" (System/getenv "SL_API_KEY")))
+
 (defn hit-or-miss [c k v]
   (if (cache/has? c k)
     (cache/hit c k)
     (cache/miss c k v)))  
 
-(defn data-from-sl [site-id]
-	(println )
-	(let [{:keys [body error] :as resp} @(http/get (str "https://api.trafiklab.se/sl/realtid2/GetAllDepartureTypes.json/" (name site-id) "/30?key=" (System/getenv "SL_API_KEY")))]
+(defn raw-data-from-sl [site-id]
+	(let [{:keys [body error] :as resp} @(http/get (api-url site-id))]
   	(if error
     	(println "Failed, exception: " error)
-    	body)))
+    	(json/read-json body))))
+
+(defn bus-data-from-sl [site-id]
+	(group-by :Destination (:Buses (into {} (raw-data-from-sl site-id)))))
 
 (defn all [site-id]
 	(if (cache/has? @ttl-cache site-id)
 		(site-id @ttl-cache)
-		(site-id (swap! ttl-cache hit-or-miss site-id (group-by :Destination (:Buses (into {} (json/read-json (data-from-sl site-id)))))))))
-
+		(site-id (swap! ttl-cache hit-or-miss site-id (bus-data-from-sl site-id)))))
