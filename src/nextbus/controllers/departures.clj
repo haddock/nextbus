@@ -5,7 +5,7 @@
     [nextbus.models.departure :as model]))
 
 (defn index [site-id]
-  (view/index (model/all site-id)))
+  (view/index (model/bus-data site-id)))
 
 (defroutes routes
 	(GET "/" [] (index :1204))
